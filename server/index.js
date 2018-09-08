@@ -1,7 +1,26 @@
-var app = require('./config.js');
+var express = require('express');
+var bodyParser = require('body-parser');
 
-var port = process.env.PORT || 3000;
+ var items = require('../database/index.js');
 
-app.listen(port, function() {
-  console.log(`Listening to Port ${port}!!!`);
+
+var app = express();
+
+ app.use(express.static(__dirname + '/../client/dist'));
+
+
+app.get('/items', function (req, res) {
+  items.selectAll(function(err, data) {
+    if(err) {
+      res.sendStatus(500);
+    } else {
+      console.log("hi i love u")
+      res.json(data);
+    }
+  });
+});
+
+
+app.listen(3000, function() {
+  console.log('listening on port 3000!');
 });
